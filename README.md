@@ -1,15 +1,15 @@
-# Analysis of Sanitary Conditions in Chicago and Impacting Factors
+# Visualization and Analysis of Food Facilities in Chicago 
 
 # Abstract
-Chicago is the third largest city in the United States, inhabiting around 2.7 million people. A population this large made it possible to give rise to over 7300 food facilities located in 77 community areas. Considering the high number of restaurants, can we comprehensively track the sanitary conditions of these facilities? The goal of our project is to examine possible correlations, using the Chicago Food Inspections dataset. More precisely, the correlation between the facilities' sanitary conditions and their location. To develop our data story, we will use per capita income of each community area to gain further insight into the relation between the income level and restaurant sanitary conditions. This will be our main goal as we believe that restaurant quality will be correlated with the income of the community. Thus, if there is a community with a lower income the restaurants will need to accommodate accordingly by cutting costs, therefore lowering the sanitary standards. In addition, we will investigate different correlations relating to violation types.
+The goal of our project is to examine possible correlations using the Chicago Food Inspections data set and look for hidden reasons why facilities go out of business. More precisely, the correlation between the inspection results of the facilities and their location. To develop our data story, we will utilize the many attributes of this data set, including facility type, pass rate of inspections, average risk score, and number of violations. This data set consists of over 31,000 food facilities in 77 community areas. We will answer questions such as 'Can we comprehensively track the conditions of these facilities?'. In addition, we will investigate different correlations relating to violation types. As a result we will visualize our findings in an understandable way. Our visualizations include displaying our results on the map of Chicago in order to find possible patterns (e.g. the locations of facilities that are out of order). Moreover, we will utilize various types of plots to show the characteristics of the data set. In the end, the reader will be able to understand the food sector in Chicago with its depth and with the possibility of opening a new facility based on our insight.
 
 # Research questions
-* Is there any correlation between facility sanitary conditions and their geolocation?
-* Does a community with a lower level of income result in facilities that are unsafe?
-* Are the violations present also related to the location of the facility?
+* Is there any correlation between facility conditions and their geolocation?
+* Are the violations present related to the location of the facility?
+* Is there a correlation between the type of violation a facility commits and going out of business?
 
-# Dataset
-We will use the provided dataset called Chicago Food Inspections (https://www.kaggle.com/chicago/chicago-food-inspections). It is in a csv format and provides information such as violations, type of facility and location. We will augment this dataset with another dataset provided by the City of Chicago. This dataset (https://data.cityofchicago.org/Health-Human-Services/Per-Capita-Income/r6ad-wvtk) has information about per capita income for each of the communal areas. We believe we can use these two datasets combined to answer some of our research questions.
+# Data set
+We will use the provided data set called Chicago Food Inspections (https://www.kaggle.com/chicago/chicago-food-inspections). It is in a csv format and provides information such as violations, type of facility, and location. 
 
 # A list of internal milestones up until project milestone 2
 * Clean up the dataset, dealing with incomplete data to deliver comprehensive dataset
