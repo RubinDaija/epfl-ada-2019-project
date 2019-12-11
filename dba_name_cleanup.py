@@ -1,8 +1,13 @@
 import pandas as pd
+import numpy as np
+from shapely.geometry import Point
+from shapely.geometry.polygon import Polygon
+import geopandas as gpd
 
 df = pd.read_csv('food-inspections.csv')
-print("Old food inspections file saved to food-inspections(old).csv")
+df.set_index('Inspection ID', inplace=True)
 df.to_csv('food-inspections(old).csv')
+print("Old food inspections file saved to food-inspections(old).csv")
 
 df['DBA Name'] = df['DBA Name'].apply(lambda x: x.upper())
 
@@ -58,7 +63,7 @@ df['DBA Name'] = df['DBA Name'].apply(lambda x: "MCCORMICK PLACE" if ("mccormick
 df['DBA Name'] = df['DBA Name'].apply(lambda x: "FOOD 4 LESS" if ("food" in x.lower() and "4" in x.lower() and "less" in x.lower())  else x)
 df['DBA Name'] = df['DBA Name'].apply(lambda x: "LEVY RESTAURANTS" if ("levys" in x.lower() and "restaurants" in x.lower() or "levy" in x.lower() and "restaurants" in x.lower())  else x)
 df['DBA Name'] = df['DBA Name'].apply(lambda x: "PETES MEAT & GROCERY #2" if ("PETES MEAT & GROCERY#2" in x.lower())  else x)
-df['DBA Name'] = df['DBA Name'].apply(lambda x: "SKYHIGH - 101" if ("SKYHIGH-101" in x.lower())  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "SKYHIGH-101" if ("skyhigh" in x.lower() and "-" in x.lower() and "101" in x.lower())  else x)
 df['DBA Name'] = df['DBA Name'].apply(lambda x: "SUNSET CAFE" if ("sunset" in x.lower() and "cafe" in x.lower())  else x)
 df['DBA Name'] = df['DBA Name'].apply(lambda x: "SPORT SERVICE SOLDIER FIELD" if ("sport" in x.lower() and "service" in x.lower() and "soldier" in x.lower() and "field" in x.lower())  else x)
 df['DBA Name'] = df['DBA Name'].apply(lambda x: "PETES MARKET" if ("petes" in x.lower() and "market" in x.lower())  else x)
@@ -66,7 +71,19 @@ df['DBA Name'] = df['DBA Name'].apply(lambda x: "GACE PARK FOOD" if ("gace" in x
 df['DBA Name'] = df['DBA Name'].apply(lambda x: "CASA CENTRAL COMMUNITY SERVICE" if ("casa central community services" in x.lower())  else x)
 df['DBA Name'] = df['DBA Name'].apply(lambda x: "ST ELIZABETH ELEMENTARY SCHOOL" if ("St Elizabeth Elem School" in x.lower())  else x)
 df['DBA Name'] = df['DBA Name'].apply(lambda x: "ALS PIZZA" if ("als" in x.lower() and "pizza" in x.lower())  else x)
-df['DBA Name'] = df['DBA Name'].apply(lambda x: "PRET A MANGER" if ("PRET A MANAGER" in x.lower())  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "PRET A MANGER" if ("pret a manager" in x.lower())  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "I-CAFE" if ("I - CAFE SUKURS PLACE PIDE VE LAHMACUN" in x or "I - CAFE" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "UNITED FIRST INTERNATIONAL LOUNGE T1CONCOURSE C" if ("UNITED FIRST INTERNATIONAL LOUNGE T-1 CONCOURSE C" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "SUNSET CAFE" if ("SUNSET CAFFE" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "LA CABANA GRILL" if ("LA CAVANA" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "EURO CONVENIENT" if ("EURO CONVENIENT STORE" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "THE TWO LIONS PUB & GRILL" if ("THE RED LION PUB AND GRILLE" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "OH FUSION THAI & SUSHI BAR" if ("NINEFACE THAI & SUSHI BAR" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "GATEWAY NEWSTAND" if ("GATEWAY NEWSTANDS" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "JENNYS GOURMET RESTAURANT" if ("JEANNYS GOURMET RESTAURANT" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "GOLDEN HOOKS FISH & CHICKEN" if ("GOLDEN HOOKS FISH & CHICAGO" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "AL MEDINA RESTAURANT" if ("AL MEDINA RESTAURANT & GRILL" in x)  else x)
+df['DBA Name'] = df['DBA Name'].apply(lambda x: "HOOK FISH AND CHICKEN" if ("HOOK FISH & CHICKEN" in x)  else x)
 
 df['Facility Type'] = df['Facility Type'].apply(lambda x: str(x))
 df['Facility Type'] = df['Facility Type'].apply(lambda x: x.upper())
@@ -129,6 +146,78 @@ for index, row in df.iterrows():
     if row['Facility Type'] == "NAN" and row['DBA Name'] in eminemsDictionary:
         df.at[index,'Facility Type'] = eminemsDictionary[row['DBA Name']]
 
-df.set_index('Inspection ID', inplace=True)
+df['Inspection Type'] = df['Inspection Type'].apply(lambda x: str(x))
+df['Inspection Type'] = df['Inspection Type'].apply(lambda x: x.upper())
+
+df = df[~(df["Inspection Type"] == "NAN")]
+df['Inspection Type'] = df['Inspection Type'].apply(lambda x: "CANVASS" if ("canvass" in x.lower() or "canvas" in x.lower() or "RECENT INSPECTION" in x)  else x)
+df['Inspection Type'] = df['Inspection Type'].apply(lambda x: "OUT OF BUSINESS" if ("out" in x.lower() and "busines" in x.lower() or "o.b." in x.lower())  else x)
+df['Inspection Type'] = df['Inspection Type'].apply(lambda x: "TASK FORCE LIQUOR" if ("liquor" in x.lower() or "1474" in x or "1470" in x)  else x)
+df['Inspection Type'] = df['Inspection Type'].apply(lambda x: "FIRE-COMPLAINT" if ("fire" in x.lower())  else x)
+df['Inspection Type'] = df['Inspection Type'].apply(lambda x: "SUSPECTED FOOD POISONING" if ("food" in x.lower() and "poisoning" in x.lower() or "two people ate and" in x.lower() )  else x)
+df['Inspection Type'] = df['Inspection Type'].apply(lambda x: "COMPLAINT" if ("POISONING" in x or "COMPLAINT" in x)  else x)
+df['Inspection Type'] = df['Inspection Type'].apply(lambda x: "LICENSE" if ("LICENSE RE-INSPECTION" in x or "TASK FORCE" in x or "CONSULTATION" in x)  else x)
+
+op = df.groupby("Inspection Type").count().sort_values(by=['DBA Name'], ascending = False)
+useless_inspections =[]
+for index, row in op.iterrows():
+    if row['DBA Name'] < 100:
+        useless_inspections.append(index)
+
+df['Inspection Type'] = df['Inspection Type'].apply(lambda x: "SHIT" if x in useless_inspections  else x)
+df = df[~(df["Inspection Type"] == "SHIT")]
+
+df = df[~(df['Facility Type'] == "NAN")]
+
+#-------------------------------------------RUSTYS Regions------------------------------------------------
+df = df.drop(columns = ['Historical Wards 2003-2015','Zip Codes', 'Community Areas', 'Census Tracts', 'Wards', 'City', 'State'])
+chicago_boundaries = gpd.read_file('Boundaries_Chicago.geojson')
+
+# Cleaning the data set: removing rows with Risk value other than 1-3
+df = df[df.Risk.str.contains("[1-3]",na=False)]
+# Converting Risk value to numeric
+df['Risk'] = df.Risk.apply(lambda x: int(x.strip('Risk')[1]))
+#Get rid of nan positions -> you might want to delete this afterwards
+df = df[~df['Latitude'].isnull()]
+#Adds nan column called regions
+df = df.assign(Regions=np.nan)
+#Creates an array holding names of all regions
+all_regions = [None] * df.shape[0]
+
+for i in range(df.shape[0]):
+    j = 0
+    for name in chicago_boundaries['pri_neigh']:
+        x = df['Longitude'].iloc[i]
+        y = df['Latitude'].iloc[i]
+        polygon = chicago_boundaries['geometry'].iloc[j]
+        point = Point(x,y) # create point
+        #print(polygon.contains(point)) # check if polygon contains point
+        if(point.within(polygon)):
+            all_regions[i] = name
+            break
+        j = j + 1
+
+#Add regions to the region column
+df['Regions'] = all_regions
+
+#Finds out which inspections have not been assigned to a given region
+missings_all = df[df['Regions'].isnull()]
+
+#These locations were on the borders, they had to included manually
+unique_longitude_all = missings_all['Longitude'].unique()
+unique_latitude_all = missings_all['Latitude'].unique()
+
+#Include locations on borders
+for index, row in missings_all.iterrows():
+    if row['Longitude'] == unique_longitude_all[0] and row['Latitude'] == unique_latitude_all[0]:
+        df.at[index, 'Regions'] = "O'Hare"
+    if row['Longitude'] == unique_longitude_all[1] and row['Latitude'] == unique_latitude_all[1]:
+        df.at[index, 'Regions'] = 'Near North'
+    if row['Longitude'] == unique_longitude_all[2] and row['Latitude'] == unique_latitude_all[2]:
+        df.at[index, 'Regions'] = 'Mount Greenwood'
+
+
+
+
 df.to_csv('food-inspections.csv')
 print("DONE")
