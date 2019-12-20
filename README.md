@@ -13,7 +13,7 @@ We will use the provided data set called Chicago Food Inspections (https://www.k
 * Census Data - Selected socioeconomic indicators in Chicago (https://data.cityofchicago.org/Health-Human-Services/Census-Data-Selected-socioeconomic-indicators-in-C/kn9c-c2s2) - provides us socioeconomic information about each region separately.
 * Boundaries (https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-Community-Areas-current-/cauq-8yn6) - provides detailed latitude and longitude of each reason. We use this to know in which region each of our establishments is by using latitude and longitude.
 
-#Note
+# Note
 We have seperated the cleaning part of our work with the analysis one, for the sake of keeping our notebook a bit cleaner. Hence our repository has two files. The dba_name_cleanup.py is a python script which cleans the database entries and saves the result as a file. The Analysis.ipynb represents our complete analysis into one notebook.
 
 Everyone from the team provided an equal amount of contribution to this project.
